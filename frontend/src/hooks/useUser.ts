@@ -1,11 +1,10 @@
-import { useMemo } from 'react';
-import { useUsageLimit } from './useUsageLimit';
+import { useAuth } from '../context/AuthContext';
 
 export function useUser() {
-  const { usage } = useUsageLimit();
-
-  return useMemo(() => ({
-    plan: usage?.plan ?? 'free',
-    isPro: usage?.plan === 'pro' || usage?.plan === 'business',
-  }), [usage]);
+  const { user } = useAuth();
+  return {
+    user,
+    plan: user?.plan ?? 'free',
+    isPro: user?.plan === 'pro' || user?.plan === 'business',
+  };
 }

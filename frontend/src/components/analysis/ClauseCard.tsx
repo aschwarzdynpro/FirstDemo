@@ -21,23 +21,23 @@ export default function ClauseCard({ clause, isPro }: ClauseCardProps) {
 
   return (
     <div className={cn('rounded-xl border bg-white shadow-sm transition-shadow hover:shadow-md', borderColor)}>
-      {/* Header — always visible */}
+      {/* Header */}
       <button
         onClick={() => setExpanded((v) => !v)}
         className="flex w-full items-start justify-between gap-3 p-4 text-left"
       >
-        <div className="flex flex-col gap-1.5">
-          <span className="font-semibold text-gray-900">{clause.title}</span>
+        <div className="flex flex-col gap-1 min-w-0">
+          <span className="font-semibold text-gray-900 text-sm sm:text-base">{clause.title}</span>
           {!expanded && (
-            <p className="line-clamp-1 text-sm text-gray-500">{clause.plainExplanation}</p>
+            <p className="line-clamp-2 text-xs sm:text-sm text-gray-500">{clause.plainExplanation}</p>
           )}
         </div>
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2 pt-0.5">
           <RiskBadge risk={clause.risk} size="sm" />
           {expanded ? (
-            <ChevronUp size={16} className="text-gray-400" />
+            <ChevronUp size={16} className="text-gray-400 hidden sm:block" />
           ) : (
-            <ChevronDown size={16} className="text-gray-400" />
+            <ChevronDown size={16} className="text-gray-400 hidden sm:block" />
           )}
         </div>
       </button>
@@ -45,27 +45,24 @@ export default function ClauseCard({ clause, isPro }: ClauseCardProps) {
       {/* Expanded content */}
       {expanded && (
         <div className="border-t border-gray-100 px-4 pb-4 pt-3 space-y-4">
-          {/* Original text */}
           <div>
             <p className="mb-1 flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-gray-400">
               <FileText size={12} />
               Originaltext
             </p>
-            <blockquote className="rounded-lg bg-gray-50 px-3 py-2 text-sm italic text-gray-600 border-l-4 border-gray-200">
+            <blockquote className="rounded-lg bg-gray-50 px-3 py-2 text-xs sm:text-sm italic text-gray-600 border-l-4 border-gray-200">
               {clause.originalText}
             </blockquote>
           </div>
 
-          {/* Explanation */}
           <div>
             <p className="mb-1 text-xs font-medium uppercase tracking-wide text-gray-400">Erklärung</p>
             <p className="text-sm text-gray-700">{clause.plainExplanation}</p>
           </div>
 
-          {/* Risk reason */}
           <div
             className={cn(
-              'rounded-lg px-3 py-2 text-sm',
+              'rounded-lg px-3 py-2 text-xs sm:text-sm',
               clause.risk === 'high'
                 ? 'bg-red-50 text-red-700'
                 : clause.risk === 'medium'
@@ -77,9 +74,8 @@ export default function ClauseCard({ clause, isPro }: ClauseCardProps) {
             {clause.riskReason}
           </div>
 
-          {/* Suggestion — Pro only */}
           {clause.suggestion && (
-            <div className={cn('relative rounded-lg border p-3', isPro ? 'border-indigo-100 bg-indigo-50' : '')}>
+            <div className={cn('relative rounded-lg border p-3', isPro ? 'border-indigo-100 bg-indigo-50' : 'border-gray-100 bg-gray-50')}>
               <p className="mb-1 flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-indigo-500">
                 <Lightbulb size={12} />
                 Verbesserungsvorschlag

@@ -26,20 +26,21 @@ export default function Home() {
   const isLimit429 = error?.startsWith('429:');
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 py-10">
-      {/* Hero */}
+    <div className="mx-auto w-full max-w-3xl px-4 py-8 sm:py-10">
+      {/* Hero — only on idle */}
       {status === 'idle' && (
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-            Verträge verstehen — <span className="text-indigo-600">ohne Anwalt</span>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
+            Verträge verstehen —{' '}
+            <span className="text-indigo-600">ohne Anwalt</span>
           </h1>
-          <p className="mt-3 text-gray-500">
+          <p className="mt-3 text-sm sm:text-base text-gray-500 max-w-lg mx-auto">
             Laden Sie einen Vertrag hoch und erhalten Sie eine verständliche KI-Analyse in Sekunden.
           </p>
         </div>
       )}
 
-      {/* Upload */}
+      {/* Upload / error */}
       {(status === 'idle' || status === 'error') && (
         <div className="space-y-4">
           <DropZone onFile={handleFile} disabled={isAtLimit} />

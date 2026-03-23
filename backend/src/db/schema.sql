@@ -3,8 +3,13 @@ CREATE TABLE IF NOT EXISTS users (
   id TEXT PRIMARY KEY,
   email TEXT UNIQUE,
   plan TEXT DEFAULT 'free',        -- 'free' | 'pro' | 'business'
+  password_hash TEXT,
+  password_salt TEXT,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Migration: add password columns if not exist (for existing DBs)
+-- SQLite does not support IF NOT EXISTS on ALTER TABLE, so we use a workaround via the init script.
 
 -- Analysen
 CREATE TABLE IF NOT EXISTS analyses (

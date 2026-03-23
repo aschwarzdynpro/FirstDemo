@@ -13,6 +13,17 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// On 401 → clear stale token (page will redirect via RequireAuth)
+api.interceptors.response.use(
+  (r) => r,
+  (err: { response?: { status?: number } }) => {
+    if (err.response?.status === 401) {
+      localStorage.removeItem('token');
+    }
+    return Promise.reject(err);
+  }
+);
+
 export async function fetchDocuments(): Promise<Document[]> {
   const { data } = await api.get<{ documents: Document[] }>('/api/documents');
   return data.documents;

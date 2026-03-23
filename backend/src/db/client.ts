@@ -23,8 +23,21 @@ export function getDb(): Database.Database {
 
     const schema = fs.readFileSync(SCHEMA_PATH, 'utf-8');
     db.exec(schema);
+
+    // Migrations: add columns added after initial release
+    runMigrations(db);
   }
   return db;
+}
+
+function runMigrations(db: Database.Database): void {
+  const cols = (db.pragma('table_info(users)') as Array<{ name: string }>).map((c) => c.name);
+  if (!cols.includes('password_hash')) {
+    db.exec('ALTER TABLE users ADD COLUMN password_hash TEXT');
+  }
+  if (!cols.includes('password_salt')) {
+    db.exec('ALTER TABLE users ADD COLUMN password_salt TEXT');
+  }
 }
 
 export default getDb;

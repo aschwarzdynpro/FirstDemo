@@ -5,6 +5,7 @@ import { authMiddleware } from './middleware/auth';
 import analysisRouter from './routes/analysis';
 import documentsRouter from './routes/documents';
 import userRouter from './routes/user';
+import authRouter from './routes/auth';
 
 dotenv.config();
 
@@ -22,7 +23,8 @@ app.use(express.urlencoded({ extended: true }));
 // Auth middleware — attaches userId to every request
 app.use(authMiddleware);
 
-// Routes
+// Routes (auth before global authMiddleware so login/register don't require a token)
+app.use('/api/auth', authRouter);
 app.use('/api/analyze', analysisRouter);
 app.use('/api/documents', documentsRouter);
 app.use('/api/user', userRouter);

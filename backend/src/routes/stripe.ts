@@ -12,11 +12,12 @@ function getStripe(): Stripe {
   return new Stripe(key);
 }
 
-// Price IDs are read from env so they can differ between test/live mode
-const PRICE_IDS: Record<string, string | undefined> = {
-  pro: process.env.STRIPE_PRICE_PRO,
-  business: process.env.STRIPE_PRICE_BUSINESS,
-};
+// Price IDs are read lazily so env-var changes (e.g. in tests) take effect
+function getPriceId(plan: string): string | undefined {
+  if (plan === 'pro')       return process.env.STRIPE_PRICE_PRO;
+  if (plan === 'business')  return process.env.STRIPE_PRICE_BUSINESS;
+  return undefined;
+}
 
 // POST /api/stripe/create-checkout-session
 router.post('/create-checkout-session', async (req: AuthenticatedRequest, res: Response): Promise<void> => {
@@ -27,7 +28,7 @@ router.post('/create-checkout-session', async (req: AuthenticatedRequest, res: R
     return;
   }
 
-  const priceId = PRICE_IDS[plan];
+  const priceId = getPriceId(plan);
   if (!priceId) {
     res.status(503).json({ error: 'Stripe-Preise noch nicht konfiguriert.' });
     return;

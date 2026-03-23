@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { z } from 'zod';
 import { getDb } from '../db/client';
 import { ensureUserExists } from '../services/usageTracker';
+import { sendWelcomeEmail } from '../services/email';
 
 const router = Router();
 
@@ -64,6 +65,9 @@ router.post('/register', (req: Request, res: Response): void => {
   `).run(userId, email, passwordHash, salt);
 
   ensureUserExists(userId, email);
+
+  // Fire-and-forget welcome email
+  sendWelcomeEmail(email).catch(() => {});
 
   const token = signToken(userId, email);
   res.status(201).json({ token, user: { id: userId, email, plan: 'free' } });

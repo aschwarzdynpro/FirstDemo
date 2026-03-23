@@ -2,15 +2,16 @@ import { CheckCircle2 } from 'lucide-react';
 import type { AnalysisResult } from '../../types';
 import RiskSummary from './RiskSummary';
 import ClauseCard from './ClauseCard';
+import ExportButton from './ExportButton';
 
 interface AnalysisViewProps {
   result: AnalysisResult;
   isPro?: boolean;
   filename?: string;
+  documentId?: string;   // present when viewing a saved analysis
 }
 
-export default function AnalysisView({ result, isPro = false, filename }: AnalysisViewProps) {
-  // Sort: high → medium → low
+export default function AnalysisView({ result, isPro = false, filename, documentId }: AnalysisViewProps) {
   const sorted = [...result.clauses].sort((a, b) => {
     const order = { high: 0, medium: 1, low: 2 };
     return order[a.risk] - order[b.risk];
@@ -18,11 +19,16 @@ export default function AnalysisView({ result, isPro = false, filename }: Analys
 
   return (
     <div className="space-y-6">
-      {/* Filename */}
+      {/* Filename + export */}
       {filename && (
-        <p className="text-sm text-gray-400">
-          Analyse von <span className="font-medium text-gray-600">{filename}</span>
-        </p>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <p className="text-sm text-gray-400">
+            Analyse von <span className="font-medium text-gray-600">{filename}</span>
+          </p>
+          {documentId && (
+            <ExportButton documentId={documentId} filename={filename} />
+          )}
+        </div>
       )}
 
       {/* Overall risk banner */}

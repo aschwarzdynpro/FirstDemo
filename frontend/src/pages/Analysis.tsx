@@ -56,7 +56,7 @@ export default function Analysis() {
       >
         <ArrowLeft size={14} /> Verlauf
       </Link>
-      <AnalysisView result={doc.result} isPro={isPro} filename={doc.filename} />
+      <AnalysisView result={doc.result} isPro={isPro} filename={doc.filename} documentId={doc.id} />
     </div>
   );
 }

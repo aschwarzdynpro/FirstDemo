@@ -38,6 +38,9 @@ function runMigrations(db: Database.Database): void {
   if (!cols.includes('password_salt')) {
     db.exec('ALTER TABLE users ADD COLUMN password_salt TEXT');
   }
+  if (!cols.includes('stripe_customer_id')) {
+    db.exec('ALTER TABLE users ADD COLUMN stripe_customer_id TEXT');
+  }
 }
 
 export default getDb;
